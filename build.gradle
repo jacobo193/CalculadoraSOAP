@@ -1,0 +1,76 @@
+
+defaultTasks 'clean', 'test', 'aggregate'
+
+
+
+group 'co.com.sofka.test'
+version '1.0.0'
+
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.4")
+    }
+}
+repositories {
+    mavenLocal()
+    jcenter()
+}
+apply plugin: 'java'
+apply plugin: 'jacoco'
+apply plugin: 'net.serenity-bdd.aggregator'
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+}
+
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    // https://mvnrepository.com/artifact/org.apache.poi/poi
+    implementation group: 'org.apache.poi', name: 'poi', version: '4.1.2'
+
+    // https://mvnrepository.com/artifact/org.json/json
+    implementation group: 'org.json', name: 'json', version: '20180130'
+
+    implementation group: 'net.serenity-bdd', name: 'serenity-core', version: '2.3.4'
+    implementation group: 'net.serenity-bdd', name: 'serenity-cucumber6', version: '2.3.4'
+    implementation group: 'net.serenity-bdd', name: 'serenity-screenplay', version: '2.3.4'
+    implementation group: 'net.serenity-bdd', name: 'serenity-screenplay-rest', version: '2.3.4'
+    implementation group: 'net.serenity-bdd', name: 'serenity-screenplay-webdriver', version: '2.3.4'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
+    implementation group: 'org.assertj', name: 'assertj-core', version: '3.8.0'
+    implementation group: 'com.github.javafaker', name: 'javafaker', version: '1.0.2'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
+    annotationProcessor "org.projectlombok:lombok:1.18.12"
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.30'
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+    reportsDir = file("$buildDir/customJacocoReportDir")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination file("${buildDir}/jacocoHtml")
+    }
+}
+test {
+    useJUnit()
+
+}
+gradle.startParameter.continueOnFailure = true
